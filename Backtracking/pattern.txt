@@ -1,0 +1,16 @@
+
+void solve()
+{
+	// if is_solve() {
+	make the modifiication
+	return
+	}
+  for_each choice {
+	if isValid(choice) {
+		modify the variable 
+		passToTheFunction()
+		redo the variable
+	}
+  }
+
+}
