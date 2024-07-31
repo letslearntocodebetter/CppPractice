@@ -1,0 +1,26 @@
+0-1 knapsack problems
+
+1. subsset sum
+2. equal sum partition 
+3. cout of subset sum
+4. minum subset sum diff
+5. target sum diff
+6. num of subset 
+
+
+In the 0/1 dp the i is the index and j is weight 
+
+In general, the W will be the target value. we will not have value[i] we wil have only weight[i] array.
+The weight array will be replaced by some propery which has restriction to be optimised and target is W.
+Max of
+    dp[i][j]= max(dp[i-1][j-wt[i-1]] + val[i-1], dp[i-1][j]);
+
+
+
+choices
+optionmal
+chice diagram
+
+
+think of the smallest valid input.
+

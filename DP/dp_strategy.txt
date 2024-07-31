@@ -1,0 +1,30 @@
+function dp(dp_state, memo_dict) {
+    // check if we have seen this dp_state
+    if dp_state in memo_dict
+        return memo_dict[dp_state]
+
+    // base case (a case that we know the answer for already) such as dp_state is empty
+    if dp_state is the base cases
+        return things like 0 or null
+    
+    calculate dp(dp_state) from dp(other_state)
+    
+    save dp_state and the result into memo_dict
+}
+function answerToProblem(input) {
+    return dp(start_state, empty_memo_dict)
+}
+
+function dp(int n) {
+    // check the validiy
+
+    // fil the arry with base cases
+
+    // fill the arry with rest of the cases
+
+   return array[n];
+}
+function answerToProblem(input) {
+    return dp(number)
+}
+
