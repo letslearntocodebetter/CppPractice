@@ -45,10 +45,12 @@ public:
             time++;
         }
         
-        // Step 3: Check if all oranges are rotten
+        // Step 3: Check if all oranges are
         return fresh == 0 ? time : -1;
     }
     bool isBounded(int nx, int ny, vector<vector<int>>grid) {
         return true;
     }
 };
+
+

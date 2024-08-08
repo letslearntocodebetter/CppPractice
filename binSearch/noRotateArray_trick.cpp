@@ -11,7 +11,7 @@ int findRotationCount(const std::vector<int>& arr) {
         if (arr[mid] <= arr[prev] && arr[mid] <= arr[next]) {
             return mid;
         }
-        if (arr[mid] <= arr[right]) {
+        if (arr[mid] <= arr[right]) { // the arry is sorted from mid to right it means the min point should fall on the left side of the mid, so we change our right pointer to mid -1
             right = mid - 1;
         } else if (arr[mid] >= arr[left]) {
             left = mid + 1;
