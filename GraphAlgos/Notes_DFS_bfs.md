@@ -4,7 +4,7 @@ This is because BFS explores nodes layer-by-layer, and marking
 upon enqueueing avoids revisiting nodes while still 
 maintaining the shortest path exploration in an unweighted graph.
 
-DFS: Nodes are marked as visited upon processing (i.e., when popped from the stack). 
+DFS: Nodes are marked as visited upon processing (i.e., when pushing into the stack or before calling recursive funtion). 
 This ensures that DFS explores the complete depth of one path before attempting others
 and avoids prematurely marking nodes that may never actually be visited.
 
@@ -13,7 +13,6 @@ and avoids prematurely marking nodes that may never actually be visited.
 function dfs(node, graph, visited):
     visited[node] = true
     print "We have visited node", node
-
     for each neighbour in graph[node]:
         if not visited[neighbour]:
             dfs(neighbour, graph, visited)
@@ -32,59 +31,58 @@ dfs(int node, std::vector<vector<int>> &graph, std::vector<bool>& visited) {
 
 }
 
-dfs(int node, std::unorded_map<int, vector<int>>&graph, std::vector<bool>& visited) {
-    std::stack<int> stack{};
-    stack.push(node);
-
-    while(!stack.empty()) {
-        auto node = stack.top();
-        visite[node] = true;
-        stack.pop();
-        for(auto neigh : graph[node]) {
-            if (!visited[neigh]) {
-                stack.push(neigh);
-            }
-        }
-
-    }
-}
-
-BFS(int start, graph, visited) {
-
-    queue q;
+void BFS(int start, vector<vector<int>>& graph, vector<bool>& visited) {
+    queue<int> q;
     q.push(start);
-    visited[strart] = true;
+    visited[start] = true;  // Mark when enqueuing
 
     while (!q.empty()) {
-        auto node =  q.front();
+        int node = q.front();
         q.pop();
+        cout << node << " ";
+
         for (auto neigh : graph[node]) {
             if (!visited[neigh]) {
-                visited[neigh] = true;
-                BFS(neigh, graph, visited)
+                visited[neigh] = true;  // Mark before enqueuing
+                q.push(neigh);  // Correct BFS behavior
             }
         }
-
     }
-
 }
 
-void DFSOptimized(int s) {
-    std::vector<bool> visited(V, false);
-    std::stack<int> stack;
-
-    stack.push(s);
-    visited[s] = true;  // Mark as visited when pushing
+void DFS(int start, vector<vector<int>>& adj, vector<bool>& visited) {
+    stack<int> stack;
+    stack.push(start);
+    visited[start] = true;
 
     while (!stack.empty()) {
-        s = stack.top();
+        int node = stack.top();
         stack.pop();
-        std::cout << s << " ";
+        cout << node << " ";
 
-        for (int adjacent : adj[s]) {
-            if (!visited[adjacent]) {
-                stack.push(adjacent);
-                visited[adjacent] = true;  // Mark as visited when pushing
+        for (int neighbor : adj[node]) {  // No need for reverse order
+            if (!visited[neighbor]) {
+                visited[neighbor] = true;
+                stack.push(neighbor);
+            }
+        }
+    }
+}
+
+void DFS(int start, vector<vector<int>>& adj, vector<bool>& visited) {
+    stack<int> stack;
+    stack.push(start);
+    visited[start] = true;
+
+    while (!stack.empty()) {
+        int node = stack.top();
+        stack.pop();
+        cout << node << " ";
+
+        for (int neighbor : adj[node]) {  // No need for reverse order
+            if (!visited[neighbor]) {
+                visited[neighbor] = true;
+                stack.push(neighbor);
             }
         }
     }

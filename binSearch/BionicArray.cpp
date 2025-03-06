@@ -5,6 +5,7 @@ int findMaxInBitonicArray(const std::vector<int>& nums) {
     if (nums.size() == 1 || nums[0] > nums[1]) {
         return nums[0];
     }
+    
     if (nums[right] > nums[right - 1]) {
         return nums[right];
     }

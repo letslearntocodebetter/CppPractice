@@ -1,5 +1,7 @@
 #include <vector>
 
+// If the aary is sorted then index of the smallest element is the number of the rotation
+
 class RotationCounter {
 public:
     int countRotations(const std::vector<int>& arr) {
@@ -17,12 +19,9 @@ public:
 
             int mid = left + (right - left) / 2;
 
-
-            if (a[mid]  < a[mid -1] && a[mid] > a[mid+1]) return mid;
-
-            // if (arr[mid] < arr[mid - 1]) {
-            //     return mid;
-            // }
+            if (a[mid]  < a[mid -1] && a[mid] > a[mid+1]) {
+                return mid;
+            }
 
             // Check which half to search in
             if (arr[mid] > arr[right]) {
