@@ -34,6 +34,12 @@ public:
         // if start is ended, we dont have to check the boudry condition for the endpohnint 
         // as start should come before end 
     
+        
+        // If a start time is less than the current end time, it means a new meeting is starting before the current one ends. So, we need a new room (rooms++).
+        // If a start time is greater than or equal to the current end time, it means a meeting has ended, so we can reuse that room (rooms--).
+        // We keep track of the maximum number of rooms needed at any point (maxRooms).
+                
+        
         while (startPointer < intervals.size()) {
             if (startTimes[startPointer] < endTimes[endPointer]) {
                 // A new meeting has started
