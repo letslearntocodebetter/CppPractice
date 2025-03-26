@@ -53,16 +53,94 @@ public:
         // -n = -12 (two's complement: 11110100 in binary)
         // n & -n = 0100 (4 in decimal)
         // log2(4) = 2 (position of rightmost set bit)
-        
+     
+        // -n flipt all the digit except the first set digit.
+
         if (n == 0) return -1;
+       
         return log2(n & -n);
+      
+    
+    1  0 1 1 0 0 
+
+
+    0  1 0 1 1 1
+    -
+
+    0  0 0 1 0 0  = 2 ^2 = 2
+
+
+    -
+
+
+
+
+        // n = 12
+      1 1 0 0 = 12
+     
+      0 0 1 1 + 1 = -12
+
+      0  1  0 0
+            
+      1 1 1 0 0 0
+      
+      0 0 0 1 1 1 + 1
+      
+      0  0   1   0   0   0
+
+      - 3th bit 
+      0 0 1 0 0 0 = 24 = 16
+
+      -
+      2^3 = 8
+      log2 (8)  == 3
+  
+      log 2 2 ^3 = log 8
+
+      3 log2 2 = log 8
+
+      3  = log 8
+
     }
     
     // Bonus: Clear the rightmost set bit
     static int clearRightmostSetBit(int n) {
         return n & (n - 1);
     }
+
+    1 1 0 0 - 1  =  
     
+    1 0  1 1 + 1  
+
+    -
+    1 0 0 0
+   -
+
+    1 <- set bit
+
+    1 0 0 
+    0 1 1 
+  --
+    0 0 0 
+  --  
+
+  1 0 0 0 
+  0 1 1 1
+  -
+  0 0 0 0 => this is power of 2
+
+
+  -
+
+  1 1 0 0 0 
+  1 0 1 1 1 
+  -
+  1 0 0 0 0
+  -
+ 
+    So -1 flips all the bits till the first set bit.
+    it make all zero to 1 and first one to zero from right.
+
     // Bonus: Check if number is power of 2
     static bool isPowerOfTwo(int n) {
         return n > 0 && (n & (n - 1)) == 0;
@@ -76,8 +154,22 @@ public:
     }
     return result;
 
-    swap (int &a , int&b) {
+  1, 1 , 2, 2, 3, 3, 5, 
+
+  1, 2, 3, 1
+
+  1 ^2^2 ^3 ^1
+
+x ^x = 0
+0 ^x = 1
+1 ^ 1 = 0
+
+
+
+swap (int &a , int&b) {
         a = a ^ b;
+        b' =   a ^ b ^ b // swap = a
+        a' =    a ^ b  ^ a 
         b = a ^ b;
         a = a ^ b;
     }
