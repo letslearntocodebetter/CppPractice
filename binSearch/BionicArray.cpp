@@ -46,17 +46,20 @@ int findMaxInBionicArray(const std::vector<int>& arr) {
     int left = 0;
     int right = n - 1;
     
+
+
     // Binary search to find the peak element
     while (left <= right) {
         int mid = left + (right - left) / 2;
         int prev = (mid - 1 + n) % n; // Handle wrap-around for first element
         int next = (mid + 1) % n;     // Handle wrap-around for last element
         
-        // Check if mid is the peak
+    // Check if mid is the peak
         if (arr[mid] >= arr[prev] && arr[mid] >= arr[next]) {
             return arr[mid];
         }
-        
+
+        // Compare with the mid element to see where  we are moving to
         // If next element is greater, move right (we're on increasing side)
         else if (arr[mid] < arr[next]) {
             left = mid + 1;

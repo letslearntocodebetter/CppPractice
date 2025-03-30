@@ -29,18 +29,42 @@ private:
         
         inStack[course] = false;
         return true;
-    /**
-     * @brief Performs a depth-first search to detect cycles in the course dependency graph.
-     *
-     * This function implements a DFS traversal to check for cycles in the course prerequisite graph.
-     * It uses two vectors to keep track of visited nodes and nodes currently in the recursion stack.
-     *
-     * @param course The current course being processed.
-     * @param graph An adjacency list representation of the course dependency graph.
-     * @param visited A vector to keep track of visited courses.
-     * @param inStack A vector to keep track of courses in the current DFS path.
-     * @return true if no cycle is detected, false if a cycle is found.
-     */
+
+
+// A node being visited means we've completely explored it and all its dependencies.
+// A node being inStack means we're currently exploring it and haven't finished checking all its dependencies yet.
+
+// To detect a cycle, we need to know if we encounter a node that we're already in the process of exploring. That's what inStack tells us.
+// Regarding your question about changing the order of checks, let's analyze:
+// cppCopy// Current order
+// if (inStack[course]) {
+//     return false;  // Cycle detected
+// }
+// if (visited[course]) {
+//     return true;  // Already processed this course
+// If we reverse the order:
+// if (visited[course]) {
+//     return true;  // Already processed this course
+// }
+// if (inStack[course]) {
+//     return false;  // Cycle detected
+// }
+// This would still work correctly because:
+
+// If a node is already fully visited, we've previously determined it doesn't lead to cycles
+// Once we're done processing a node, we set inStack[course] = false, so a fully visited node won't be in the stack
+
+// However, checking inStack first is slightly more efficient in cases where there's a cycle, as we can fail fast without needing to check visited.
+// This approach using both arrays is called the "white-gray-black" DFS algorithm for cycle detection:
+
+// White: Unvisited nodes (!visited[node] and !inStack[node])
+// Gray: Nodes being processed (visited[node] and inStack[node])
+// Black: Fully processed nodes (visited[node] and !inStack[node])
+
+A cycle exists if and only if we encounter a gray node during traversal.RetryClaude does not have the ability to run the code it generates yet.Claude can make mistakes. Please double-check responses.
+
+
+}
   bool dfs(int course, std::unordered_map<int, std::vector<int>>& graph, std::vector<bool>& visited, std::vector<bool>& inStack) {
         if (inStack[course]) {
             return false;  // Cycle detected
