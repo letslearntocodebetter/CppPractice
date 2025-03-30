@@ -1,0 +1,157 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <unordered_set>
+using namespace std;
+
+
+class Solution {
+private:
+    // Directions: up, right, down, left
+    vector<pair<int, int>> dirs = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+    
+    // DFS to count the size of an island using visited array
+    int dfs(vector<vector<int>>& grid, vector<vector<bool>>& visited, int i, int j, int islandId) {
+        int n = grid.size();
+        
+        // Base case is already satisfied since we check before calling
+        
+        // Mark as visited
+        visited[i][j] = true;
+        
+        // Store the island ID for this cell
+        grid[i][j] = islandId;
+        
+        int size = 1; // Count the current cell
+        
+        // Recursively explore in all four directions,
+        // but only if the neighboring cell is valid
+        for (auto& dir : dirs) {
+            int ni = i + dir.first;
+            int nj = j + dir.second;
+            
+            // Check boundary conditions BEFORE making the recursive call
+            if (ni >= 0 && ni < n && nj >= 0 && nj < n && grid[ni][nj] == 1 && !visited[ni][nj]) {
+                size += dfs(grid, visited, ni, nj, islandId);
+            }
+        }
+        
+        return size;
+    }
+}
+
+
+class Solution {
+private:
+    // Directions: up, right, down, left
+    vector<pair<int, int>> dirs = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+    
+    // DFS to count the size of an island using visited array
+    int dfs(vector<vector<int>>& grid, vector<vector<bool>>& visited, int i, int j, int islandId) {
+        int n = grid.size();
+        
+        // Check boundaries and if the cell is land and not visited
+        if (i < 0 || i >= n || j < 0 || j >= n || grid[i][j] != 1 || visited[i][j]) {
+            return 0;
+        }
+        
+        // Mark as visited
+        visited[i][j] = true;
+        
+        // Store the island ID for this cell
+        grid[i][j] = islandId;
+        
+        int size = 1; // Count the current cell
+        
+        // Recursively explore in all four directions
+        for (auto& dir : dirs) {
+            size += dfs(grid, visited, i + dir.first, j + dir.second, islandId);
+        }
+        
+        return size;
+    }
+    
+public:
+    int largestIsland(vector<vector<int>>& grid) {
+        int n = grid.size();
+        
+        // Create a visited array
+        vector<vector<bool>> visited(n, vector<bool>(n, false));
+        
+        // Step 1: Label each island with a unique ID (starting from 2)
+        // and compute the size of each island
+        unordered_map<int, int> islandSizes;
+        int islandId = 2; // Start IDs from 2 since 0 and 1 are already used
+        int largestOriginalIsland = 0; // Track the largest island without flipping
+        
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1 && !visited[i][j]) {
+                    int size = dfs(grid, visited, i, j, islandId);
+                    islandSizes[islandId] = size;
+                    largestOriginalIsland = max(largestOriginalIsland, size);
+                    islandId++;
+                }
+            }
+        }
+        
+        // If there are no islands, adding one cell creates an island of size 1
+        if (islandSizes.empty()) {
+            return 1;
+        }
+        
+        // If the entire grid is filled with land, return the grid size
+        if (largestOriginalIsland == n * n) {
+            return n * n;
+        }
+        
+        // Step 2: For each 0 cell, check if flipping it would connect islands
+        int maxSize = largestOriginalIsland; // Initialize with largest original island
+        
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 0) {
+                    // Set to keep track of unique island IDs connected by this cell
+                    unordered_set<int> connectedIslands;
+                    
+                    // Check all four directions
+                    for (auto& dir : dirs) {
+                        int ni = i + dir.first;
+                        int nj = j + dir.second;
+                        
+                        if (ni >= 0 && ni < n && nj >= 0 && nj < n && grid[ni][nj] > 1) {
+                            connectedIslands.insert(grid[ni][nj]);
+                        }
+                    }
+                    
+                    // Calculate total size if this cell is flipped
+                    int totalSize = 1; // Count the flipped cell itself
+                    for (int id : connectedIslands) {
+                        totalSize += islandSizes[id];
+                    }
+                    
+                    maxSize = max(maxSize, totalSize);
+                }
+            }
+        }
+        
+        return maxSize;
+    }
+};
+
+int main() {
+    // Example 1: [[1, 0], [0, 1]]
+    vector<vector<int>> grid1 = {{1, 0}, {0, 1}};
+    Solution sol;
+    cout << "Example 1 result: " << sol.largestIsland(grid1) << endl; // Expected output: 3
+    
+    // Example 2: [[1, 1], [1, 0]]
+    vector<vector<int>> grid2 = {{1, 1}, {1, 0}};
+    cout << "Example 2 result: " << sol.largestIsland(grid2) << endl; // Expected output: 4
+    
+    // Example 3: [[1, 1], [1, 1]]
+    vector<vector<int>> grid3 = {{1, 1}, {1, 1}};
+    cout << "Example 3 result: " << sol.largestIsland(grid3) << endl; // Expected output: 4
+    
+    return 0;
+}

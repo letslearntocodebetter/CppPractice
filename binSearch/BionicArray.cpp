@@ -31,9 +31,42 @@ int findMaxInBitonicArray(const std::vector<int>& nums) {
     return -1;
 }
 
-int main() {
-    std::vector<int> bitonicArray = {1, 3, 8, 12, 4, 2};
-    int maxElement = findMaxInBitonicArray(bitonicArray);
-    std::cout << "The maximum element in the bitonic array is: " << maxElement << std::endl;
-    return 0;
+#include <iostream>
+#include <vector>
+
+// Function to find the maximum element in a bionic array
+// Using simplified comparison logic
+int findMaxInBionicArray(const std::vector<int>& arr) {
+    int n = arr.size();
+    
+    // Handle edge cases
+    if (n == 0) return -1; // Empty array
+    if (n == 1) return arr[0]; // Single element
+    
+    int left = 0;
+    int right = n - 1;
+    
+    // Binary search to find the peak element
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        int prev = (mid - 1 + n) % n; // Handle wrap-around for first element
+        int next = (mid + 1) % n;     // Handle wrap-around for last element
+        
+        // Check if mid is the peak
+        if (arr[mid] >= arr[prev] && arr[mid] >= arr[next]) {
+            return arr[mid];
+        }
+        
+        // If next element is greater, move right (we're on increasing side)
+        else if (arr[mid] < arr[next]) {
+            left = mid + 1;
+        }
+        // If next element is smaller, move left (we're on decreasing side)
+        else {
+            right = mid - 1;
+        }
+    }
+    
+    // This should not be reached for a valid bionic array
+    return arr[0];
 }

@@ -23,4 +23,10 @@ std::unordered_set<Person, PersonHash, PersonEqual> people;
     // Step 4: Use std::unordered_map with custom object and lambda functions
 
     // Step 4: Use std::unordered_map with custom object and lambda functions
-   
+  
+    std::less{} for min hea default
+    std::greater{} for max heap default
+
+    std::greater<int> for max heap defaul   
+    std::less<int> for min heap default
+    

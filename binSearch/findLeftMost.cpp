@@ -9,6 +9,7 @@ int findLeftmost(vector<int>& nums, int target) {
         
         while (left <= right) {
             int mid = left + (right - left) / 2;
+            
             if (nums[mid] == target) {
                 result = mid;
                 right = mid - 1;  // Continue searching on the left side
