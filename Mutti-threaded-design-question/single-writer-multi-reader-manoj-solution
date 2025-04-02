@@ -1,0 +1,207 @@
+
+#include<conditional_variable>
+
+std::mutex mutex;
+std::conditional_variable cv;
+st::queue<int> q;
+
+
+void writerFn(int max) {
+    
+    std::lock_guard<std::mutext> lock(mutex);
+    int randNum = std::rand();
+    
+    for (int i =0 ; i < max ; i++) {
+        std::stringt elment = "myElement_" + std::string(randNumber);
+        //
+         q.push(std::move(element);  // emplace push
+         
+         cv.notify();
+         lock.lock()
+
+    }
+    bool writerDone;
+    cv.notify_all();
+}
+
+
+void readerFn(int threadNumber) 
+{
+    std::cout <<"";
+    
+    while (true) {
+    std::unique_lock<std::muxtex> lock(mutex);
+
+    cv.wait(lock, std::time [](){return writerDone || !q.empty();});
+
+    writerDon -> InsiderFuncio
+    q.empty -> no in front
+
+    if (writerDone || q.empty()) {
+        return ;
+    }
+    }
+        auto el = q.front(); // element
+         std::cout << "reader number " << threadNumber << reads << el << std::endl;
+        q.pop();  // derain the queue
+
+    }
+}
+#include <iostream>
+#include <queue>
+#include <string>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <vector>
+#include <atomic>
+#include <cstdlib> // for std::rand() and std::srand()
+#include <ctime>   // for std::time()
+
+// Global shared resources
+std::queue<std::string> q;
+std::mutex mutex;
+std::condition_variable cv;
+std::atomic<bool> writerDone{false};
+
+// Writer function
+void write(int max) {
+    // Seed the random number generator
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
+    
+    for (int i = 0; i < max; i++) {
+        int randNum = std::rand() % 1000 + 1;
+        std::string element = "myElement_" + std::to_string(randNum) + "_" + std::to_string(i);
+        
+        // Push to the queue with proper synchronization
+        {
+            std::lock_guard<std::mutex> lock(mutex);
+            q.push(std::move(element));
+            // Print directly within the same lock
+            std::cout << "Writer produced: " << element << std::endl;
+        }
+        
+        // Notify one waiting reader
+        cv.notify_one();
+        
+        // Small delay to simulate processing
+        std::this_thread::sleep_for(std::chrono::milliseconds(20));
+    }
+    
+    // Mark as done and notify all waiting readers
+    writerDone = true;
+    cv.notify_all();
+    
+    // Log completion
+    {
+        std::lock_guard<std::mutex> lock(mutex);
+        std::cout << "Writer finished producing items." << std::endl;
+    }
+}
+
+// Reader function
+void reader(int threadNumber) {
+    while (true) {
+        std::string element;
+        
+        // Try to get an element from the queue with proper synchronization
+        {
+            std::unique_lock<std::mutex> lock(mutex);
+            
+            // Wait until there's an element or writer is done
+            cv.wait(lock, []() { 
+                return writerDone || !q.empty(); 
+            });
+            
+            // Exit if writer is done and queue is empty
+            if (q.empty() && writerDone) {
+                std::cout << "Reader " << threadNumber << " exiting - no more data." << std::endl;
+                return;
+            }
+            
+            // Get element if queue is not empty
+            if (!q.empty()) {
+                element = q.front();
+                q.pop();
+                // Print directly within the same lock
+                std::cout << "Reader " << threadNumber << " reads: " << element << std::endl;
+            }
+        }
+    }
+}
+
+
+//Adding timeout
+
+void readerFn(int threadNumber) {
+    // Define timeout duration
+//     true if the predicate evaluated to true before the timeout expired
+// false if the timeout expired and the predicate is still false
+    const auto timeout = std::chrono::milliseconds(100);
+    
+    while (true) {
+        std::string element;
+        bool timedOut = false;
+        
+        // Try to get an element from the queue with proper synchronization and timeout
+        {
+            std::unique_lock<std::mutex> lock(mutex);
+            
+            // Wait until there's an element or writer is done, with timeout
+            auto status = cv.wait_for(lock, timeout, []() { 
+                return writerDone || !q.empty(); 
+            });
+            
+            // Proper check for timeout
+            timedOut = !status; // status is false when timeout occurs before predicate becomes true
+            
+            // Exit if writer is done and queue is empty
+            if (q.empty() && writerDone) {
+                std::cout << "Reader " << threadNumber << " exiting - no more data." << std::endl;
+                return;
+            }
+            
+            // Get element if queue is not empty
+            if (!q.empty()) {
+                element = q.front();
+                q.pop();
+                // Print directly within the same lock
+                std::cout << "Reader " << threadNumber << " reads: " << element << std::endl;
+            }
+        }
+        
+        // If we timed out and the writer isn't done, log it and continue
+        if (timedOut && !writerDone) {
+            std::lock_guard<std::mutex> lock(mutex);
+            std::cout << "Reader " << threadNumber << " timed out waiting for data." << std::endl;
+            
+            // Optional: Sleep a bit before trying again to avoid busy waiting
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        }
+    }
+}
+
+
+int main() {
+    const int NUM_READERS = 5;
+    const int NUM_ITEMS = 100;
+    
+    // Create writer thread
+    std::thread writer(writer, NUM_ITEMS);
+    
+    // Create reader threads
+    std::vector<std::thread> readers;
+    for (int i = 0; i < NUM_READERS; i++) {
+        readers.emplace_back(reader, i);
+    }
+    
+    // Join all threads
+    writer.join();
+    for (auto& reader : readers) {
+        reader.join();
+    }
+    
+    std::cout << "All threads finished." << std::endl;
+    
+    return 0;
+}
