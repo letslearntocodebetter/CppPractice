@@ -115,8 +115,11 @@ public:
 
 private:
     Singleton() { std::cout << "Singleton Instance Created!" << std::endl; }
+    
     Singleton(const Singleton&) = delete;
     Singleton& operator=(const Singleton&) = delete;
+    Singleton & operator=()(const Singleton&&) noexcept = delete;
+    Singleton(Singelton &&) = delete; 
 };
 
 
