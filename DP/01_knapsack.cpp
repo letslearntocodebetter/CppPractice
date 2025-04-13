@@ -18,6 +18,18 @@
     }
 
 
+// For the 0/1 Knapsack problem with zero-based indexing, the correct state transition is:
+// dp[i][w] = max(dp[i-1][w], dp[i-1][w-weight[i-1]] + value[i-1])
+// This is because:
+
+// i represents considering the first i items (indexed 0 to i-1)
+// weight[i-1] is the weight of the ith item (zero-indexed)
+// value[i-1] is the value of the ith item (zero-indexed)
+
+//dp[i][w] = max(dp[i-1][w], dp[i-1][w-weight[i-1]] + value[i-1])
+
+
+
 using namespace std;
     // using dynamic programming
         int knapSack(int W, int wt[], int val[], int n) 

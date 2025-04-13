@@ -9,14 +9,15 @@ vector<int> dailyTemperatures(vector<int> temp)
   vector<int> ans(temperatures.size());
   stack<pair<int, int>> s;
 
-  for (int i=1; i < tmp.size(); i++) {
-       while (!s.empty() && s.top().first <= tmp[i] {
+  for (int i=0; i < tmp.size(); i++) {
+
+       while (!s.empty() && s.top().first <= tmp[i]) {
           auto index = s.top().second;
           ans[index] = i - index;
           s.pop();
       }
       // push the greatest element on the top
-      s.emplace(tmp[i], i);
+      s.push(tmp[i], i);
   }
   ret ans;
 }
