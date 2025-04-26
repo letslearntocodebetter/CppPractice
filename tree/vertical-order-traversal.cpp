@@ -152,6 +152,7 @@ void bottomView(TreeNode* root) {
     
     // Print bottom view
     cout << "Bottom View: ";
+    // they are alredy in the sorted oreded in the map
     for (auto& [hd, val] : bottomNodes) {
         cout << val << " ";
     }
@@ -176,6 +177,7 @@ void topView(TreeNode* root) {
         
         // Add this node only if this HD hasn't been seen before
         if (topNodes.find(hd) == topNodes.end()) {
+            // only care abou the first insert ,  ignore the duplicate second one
             topNodes[hd] = node->val;
         }
         

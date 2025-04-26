@@ -17,7 +17,7 @@ int kadaneWithIndices(const vector<int>& nums, int& begin, int& end) {
     int start = 0;  // Temporary start index
 
     for (size_t i = 1; i < nums.size(); ++i) {
-        if (nums[i] > currentSum + nums[i]) { // when do we have to reset the index;
+        if (nums[i] > currentSum + nums[i]) { // the sum is negetive so far so drop it;
             currentSum = nums[i];
             start = i; // Start new subarray
         } else {

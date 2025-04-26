@@ -2,7 +2,7 @@ using namespace std;
 #include <iostream>
 #include <unordered_map>
 #include <string>
-
+A 
 int longestSubSequence(const std::string &s) {
     std::unordered_map<char, int> lastIndex;
     int maxSize = 0;
