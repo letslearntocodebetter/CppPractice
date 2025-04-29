@@ -6,6 +6,8 @@ public:
         ListNode* prev = &dummy;
         ListNode* cur = head; // Pointer to track current node
 
+        // adding a dummy node as previous would help us to avoid checking the nullptr for the first node;
+        
         while (cur && cur->next) {
             ListNode* first = cur;
             ListNode* second = cur->next;
