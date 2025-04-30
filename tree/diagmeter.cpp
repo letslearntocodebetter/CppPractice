@@ -5,10 +5,12 @@ int height(TreeNode* root, int &diameter) {
     int rightHeight = height(root->right, diameter);
     
     // Update diameter if necessary
-    diameter = max(diameter, leftHeight + rightHeight);
+    auto currentDia = leftHeight + rightHeight + 1;
+    diameter = max(diameter, currentDia);
     
+    auto currentHeight = 1 + max(leftHeight, rightHeight)
     // Return the height of current node
-    return 1 + max(leftHeight, rightHeight);
+    return currentHeight;
 }
 
 
