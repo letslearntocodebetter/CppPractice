@@ -23,6 +23,7 @@ int trap(vector<int>& height) {
     for (int i = 0; i < n; ++i) {
         // Check for right boundary
         while (!st.empty() && height[i] > height[st.top()]) {
+            int right = i; // this is the right boundry 
             int bottom = st.top(); st.pop();  // valley
 
             if (st.empty()) {
@@ -30,8 +31,8 @@ int trap(vector<int>& height) {
             }
             
             int left = st.top();  // left boundary
-            int distance = i - left - 1;
-            int bounded_height = min(height[i], height[left]) - height[bottom];
+            int distance = right - left - 1; //  Exclude both boundries. i == right boundry
+            int bounded_height = min(height[right], height[left]) - height[bottom];
             totalWater += distance * bounded_height;
         }
 
