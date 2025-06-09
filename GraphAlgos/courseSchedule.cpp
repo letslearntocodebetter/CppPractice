@@ -59,7 +59,7 @@ private:
 
 // White: Unvisited nodes (!visited[node] and !inStack[node])
 // Gray: Nodes being processed (visited[node] and inStack[node])
-// Black: Fully processed nodes (visited[node] and !inStack[node])
+// Black: Fully processed nodes (visited[node] and !inStack[node]) O(V+E) time and space both
 
 A cycle exists if and only if we encounter a gray node during traversal.RetryClaude does not have the ability to run the code it generates yet.Claude can make mistakes. Please double-check responses.
 
@@ -83,9 +83,18 @@ A cycle exists if and only if we encounter a gray node during traversal.RetryCla
         }
         
         inStack[course] = false;
+        result.push_back(node);  // Add to result on backtrack (post-order)
         return true;
     }
-    }
+
+// result.rever()
+   0
+  / \
+ 1   2
+  \ /
+   3
+
+
 
 
 public:
@@ -114,7 +123,33 @@ public:
 };
 
 
+/*
+🔁 DFS Post-order Traversal Flow
+Let's trace what happens if we start DFS from node 0:
 
+DFS(0)
+    → DFS(1)
+
+        → DFS(3)
+
+            3 has no outgoing edges → Add 3 to result
+
+    Add 1 to result
+
+    → DFS(2)
+
+        → DFS(3) already visited → skip
+
+    Add 2 to result
+
+Add 0 to result
+
+✅ Result (before reversing):
+csharp
+Copy
+Edit
+[3, 1, 2, 0]
+*/
 
 // Kahn topological sort
 
@@ -141,7 +176,8 @@ class Solution {
             graph[pre[1]].push_back(pre[0]);
             inDegree[pre[0]]++;
         }
-    
+        
+          vector<int> order;
         // Push all nodes with in-degree 0 into the queue
         std::queue<int> q;
         for (int i = 0; i < numCourses; i++) {
@@ -152,6 +188,7 @@ class Solution {
         while (!q.empty()) {
             int course = q.front();
             q.pop();
+            order.push_back(course);
             count++;
     
             for (int neighbor : graph[course]) {
