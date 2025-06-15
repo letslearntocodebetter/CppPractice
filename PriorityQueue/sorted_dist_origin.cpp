@@ -12,7 +12,7 @@ class Solution {
             auto foo = [this](const std::vector<int>& l, const std::vector<int> &r) {
               return (distance(l) < distance(r));
             };
-            
+           // T, Container<T>, std::greater<PAIR> pq(foo) 
             std::priority_queue<std::vector<int>, std::deque<std::vector<int>>, decltype(foo)> pq(foo);
             for (auto &point : points) {
                 if (pq.size() >= k) {
